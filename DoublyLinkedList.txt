@@ -1,0 +1,148 @@
+PROBLEM STATEMENT:
+Implement the following operations:
+1. Add node first
+2. Add node last
+3. Add node at an index
+4. Remove first node
+5. Remove last node
+6. Remove node at an index
+7. Find a node in O (1)
+
+// We have considered data type as int for simplicity
+class Node{
+	int data;
+	Node* previous;
+	Node* next;
+}
+
+//Declaring a map for finding a Node in O(1) time complexity
+map<Node*, bool> allNode;
+
+//Adding a node in front of the linked list
+Node* addFirst(Node* head, int val)
+{
+	Node* temp = new Node();
+	temp->data = val;
+	temp->previous = NULL;
+
+	if(head == NULL)
+	{
+		temp->next==NULL;
+		return temp;
+	}
+
+	temp->next = head;
+	head->previous = temp;
+
+	allNode[temp] = true;
+	return temp;
+}
+
+//Adding a node in the end of the linked list
+Node* addLast(Node* head, int val)
+{
+	Node* t2 = head;
+
+	Node* temp = new Node();
+	temp->data = val;
+	temp->next = NULL;
+
+	if(head == NULL)
+	{
+		temp->previous = NULL;
+		return temp;
+	}
+
+	while(t2!=NULL)
+	{
+		if(t2->next == NULL)
+		{
+			temp->previous = t2;
+			t2->next = temp;
+			allNode[temp] = true;
+			break;
+		}
+		t2=t2->next;
+	}
+	return head;
+}
+
+//Adding a node in at index (i) of the linked list
+Node* addAtIndex(Node* head, int val, int index)
+{
+	Node* t2 = head;
+
+	Node* temp = new Node();
+	temp->data = val;
+
+	if(head == NULL)
+	{
+		temp->next=NULL;
+		temp->previous = NULL;
+		return temp;
+	}
+
+	for(int i=0; i<index-1; i++)
+	{
+		t2=t2->next;
+	}
+
+	temp->previous = t2;
+	temp->next = t2->next;
+	t2->next->previous = temp;
+	t2->next = temp;
+	allNode[temp] = true;
+	return head;
+}
+
+//Removing a node from front of the linked list
+Node* removeFirst(Node* head)
+{
+	if(head == NULL)
+		return NULL;
+
+	head= head->next;
+	head->previous = NULL;
+	return head;
+}
+
+//Removing a node from the end of the linked list
+Node* removeLast(Node* head)
+{
+	if (head == NULL || head->next==NULL)
+		return NULL;
+
+	Node* t2 = head;
+	while(t2->next->next != NULL)
+		t2=t2->next;
+	t2->next = NULL;
+
+	return head;
+}
+
+//Removing a node at index (i) of the linked list
+Node* removeAtIndex(Node* head, int index)
+{
+	if(head == NULL)
+		return NULL;
+
+	Node* t2 = head;
+
+	for(int i=0; i<index-1; i++)
+	{
+		t2=t2->next;
+	}
+
+	t2->next->next->previous = t2;
+	t2->next = t2->next->next; 
+
+	return head;
+}
+
+//Checking whether a given node is present in the linked list or not
+bool findNode(Node* head)
+{
+	if(allNode[head] == true)
+		return true;
+	return false; 
+}
